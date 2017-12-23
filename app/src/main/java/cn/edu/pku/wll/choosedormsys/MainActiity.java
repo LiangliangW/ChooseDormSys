@@ -1,6 +1,7 @@
 package cn.edu.pku.wll.choosedormsys;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -26,6 +27,8 @@ public class MainActiity extends Activity implements View.OnClickListener{
     private String account, passWord;
     private SharedPreferences sharedPreferences;
 
+    final private int REQUEST_CODE = 1;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,14 +48,10 @@ public class MainActiity extends Activity implements View.OnClickListener{
 
         mAccount.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -66,14 +65,10 @@ public class MainActiity extends Activity implements View.OnClickListener{
 
         mPassword.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -100,6 +95,7 @@ public class MainActiity extends Activity implements View.OnClickListener{
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (mAutoLogin.isChecked()) {
+                    mRmbPwd.setChecked(true);
                     sharedPreferences.edit().putBoolean("AUTO_LOGIN", true).commit();
 
                 } else {
@@ -117,8 +113,15 @@ public class MainActiity extends Activity implements View.OnClickListener{
             passWord = mPassword.getText().toString();
 
             if (mRmbPwd.isChecked()) {
-                //TODO：验证登录是否成功，若成功，检验是否保存密码，若保存则将密码存在sharedPreferences，并跳转至info页面
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("ACCOUNT", account);
+                editor.putString("PASSWORD", passWord);
+                editor.commit();
             }
+
+            //TODO：将账号密码传给跳转页面，验证工作由跳转页面处理
+            Intent intent = new Intent(MainActiity.this, Jump.class);
+            startActivityForResult(intent, REQUEST_CODE);
         }
     }
 
