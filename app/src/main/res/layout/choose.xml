@@ -53,7 +53,7 @@
         android:layout_marginTop="20dp">
 
         <ImageView
-            android:id="@+id/sep0"
+            android:id="@+id/sep01"
             android:layout_width="match_parent"
             android:layout_height="2px"
             android:background="#000000"/>
@@ -63,7 +63,7 @@
             android:id="@+id/numchoose_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/sep0"
+            android:layout_below="@+id/sep01"
             android:background="#ffffff">
             <TextView
                 android:layout_width="match_parent"
@@ -82,9 +82,38 @@
         </RelativeLayout>
 
         <ImageView
+            android:id="@+id/sep02"
             android:layout_width="match_parent"
             android:layout_height="2px"
             android:layout_below="@+id/numchoose_text"
+            android:background="#acacac"/>
+
+        <RelativeLayout
+            android:id="@+id/choose_louhao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sep02"
+            android:background="#ffffff">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="选择宿舍楼楼号:"
+                android:textColor="#000000"
+                android:textSize="20sp"/>
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="15dp">
+            </Spinner>
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:layout_below="@+id/choose_louhao"
             android:background="#000000"/>
 
     </RelativeLayout>

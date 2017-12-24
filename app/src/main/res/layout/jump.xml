@@ -39,5 +39,35 @@
             android:text="登录中..."
             android:textColor="#000000"
             android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/mSuccessTest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_gravity="center"
+            android:text="登录成功"
+            android:textColor="#000000"
+            android:visibility="invisible"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/mAccountTest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="学号："
+            android:textColor="#000000"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/mPwdTest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="密码："
+            android:textColor="#000000"
+            android:textSize="20sp"/>
+
     </LinearLayout>
 </RelativeLayout>

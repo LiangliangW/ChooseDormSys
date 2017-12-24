@@ -7,7 +7,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -30,70 +33,114 @@
 
             <RelativeLayout
                 android:id="@+id/account"
-                android:layout_width="250dp"
-                android:layout_height="60.0dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="57dp"
                 android:layout_below="@+id/schoolName"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="50dp">
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true">
 
-                <EditText
-                    android:id="@+id/account_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="账号"
-                    android:layout_margin="10.0dip"
-                    android:drawablePadding="8.0dip"
-                    android:singleLine="true"
-                    android:background="@drawable/contact_search_box_edittext_keyword_background"
-                    android:textColor="#ff000000"
-                    android:textColorHint="#ffcccccc"
-                    android:textSize="15.0dip" />
+                <RelativeLayout
+                    android:id="@+id/account_box"
+                    android:layout_width="250dp"
+                    android:layout_height="60.0dp"
+                    android:layout_centerHorizontal="true">
 
-                <ImageView
-                    android:id="@+id/account_delete"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerInParent="true"
-                    android:layout_marginRight="20.0dp"
-                    android:src="@drawable/select_city_delete"
-                    android:visibility="invisible"
-                    app:srcCompat="@android:drawable/ic_notification_clear_all" />
+                    <EditText
+                        android:id="@+id/account_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="学号"
+                        android:layout_margin="10.0dip"
+                        android:drawablePadding="8.0dip"
+                        android:singleLine="true"
+                        android:background="@drawable/contact_search_box_edittext_keyword_background"
+                        android:textColor="#ff000000"
+                        android:textColorHint="#ffcccccc"
+                        android:textSize="15.0dip" />
 
+                    <ImageView
+                        android:id="@+id/account_delete"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginRight="20.0dp"
+                        android:src="@drawable/select_city_delete"
+                        android:visibility="invisible" />
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/account_error"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/account_box"
+                    android:text="学号错误"
+                    android:textColor="#ab0815"
+                    android:layout_centerVertical="true"
+                    android:visibility="invisible"/>
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/key"
-                android:layout_width="250dp"
-                android:layout_height="60.0dp"
                 android:layout_below="@+id/account"
-                android:layout_centerHorizontal="true">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/key_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="密码"
-                    android:layout_margin="10.0dip"
-                    android:drawablePadding="8.0dip"
-                    android:singleLine="true"
-                    android:background="@drawable/contact_search_box_edittext_keyword_background"
-                    android:textColor="#ff000000"
-                    android:textColorHint="#ffcccccc"
-                    android:textSize="15.0dip"
-                    android:inputType="textPassword"/>
+                <CheckBox
+                    android:id="@+id/check_key_visible"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_toLeftOf="@+id/key_box"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="12dip"
+                    android:textColor="#000000"
+                    android:background="@drawable/check_key_visible"
+                    android:button="@null"/>
 
-                <ImageView
-                    android:id="@+id/key_delete"
-                    android:layout_width="25.0dp"
-                    android:layout_height="25.0dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="20.0dp"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/select_city_delete"
-                    app:srcCompat="@android:drawable/ic_notification_clear_all"
+                <RelativeLayout
+                    android:id="@+id/key_box"
+                    android:layout_width="250dp"
+                    android:layout_height="60.0dp"
+                    android:layout_centerHorizontal="true">
+
+                    <EditText
+                        android:id="@+id/key_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="密码"
+                        android:layout_margin="10.0dip"
+                        android:drawablePadding="8.0dip"
+                        android:singleLine="true"
+                        android:background="@drawable/contact_search_box_edittext_keyword_background"
+                        android:textColor="#ff000000"
+                        android:textColorHint="#ffcccccc"
+                        android:textSize="15.0dip"
+                        android:inputType="textPassword"/>
+
+                    <ImageView
+                        android:id="@+id/key_delete"
+                        android:layout_width="25.0dp"
+                        android:layout_height="25.0dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="20.0dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/select_city_delete"
+                        android:visibility="invisible"/>
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/key_error"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/key_box"
+                    android:text="密码错误"
+                    android:textColor="#ab0815"
+                    android:layout_centerVertical="true"
                     android:visibility="invisible"/>
             </RelativeLayout>
+
 
             <LinearLayout
                 android:id="@+id/checkbox"
