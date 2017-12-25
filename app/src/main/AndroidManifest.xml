@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Jump"/>
+        <activity android:name=".Map"/>
         <activity android:name=".Info"/>
         <activity android:name=".Choose"/>
 
