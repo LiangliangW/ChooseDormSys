@@ -17,20 +17,20 @@ public class Student {
      * grade : 2013
      */
 
-    private int id;
+    private String id;
     private String name;
     private String gender;
     private String vCode;
     private String room;
-    private int building;
+    private String building;
     private String location;
-    private int grade;
+    private String grade;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -66,11 +66,11 @@ public class Student {
         this.room = room;
     }
 
-    public int getBuilding() {
+    public String getBuilding() {
         return building;
     }
 
-    public void setBuilding(int building) {
+    public void setBuilding(String building) {
         this.building = building;
     }
 
@@ -82,11 +82,11 @@ public class Student {
         this.location = location;
     }
 
-    public int getGrade() {
+    public String getGrade() {
         return grade;
     }
 
-    public void setGrade(int grade) {
+    public void setGrade(String grade) {
         this.grade = grade;
     }
 }

@@ -30,7 +30,6 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import cn.edu.pku.wll.util.MyX509TrustManager;
@@ -171,7 +170,6 @@ public class MainActiity extends Activity implements View.OnClickListener{
     public void onClick(View v) {
 
         if (v.getId() == R.id.login) {
-            Toast.makeText(MainActiity.this, "点击了登录", Toast.LENGTH_LONG).show();
             login();
         }
 
@@ -207,9 +205,7 @@ public class MainActiity extends Activity implements View.OnClickListener{
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 2:
-                    int errorCode = -1;
-                    errorCode = (int) msg.obj;
-
+                    int errorCode = (int) msg.obj;
                     loginBackHint(errorCode);
                     break;
                 default:
@@ -222,48 +218,51 @@ public class MainActiity extends Activity implements View.OnClickListener{
         account = mAccount.getText().toString();
         passWord = mPassword.getText().toString();
 
-        if (mRmbPwd.isChecked()) {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("ACCOUNT", account);
-            editor.putString("PASSWORD", passWord);
-            editor.commit();
-        }
+        if (!account.equals("") && !passWord.equals("")) {
+            if (mRmbPwd.isChecked()) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("ACCOUNT", account);
+                editor.putString("PASSWORD", passWord);
+                editor.commit();
+            }
 
-        final String address = "https://api.mysspku.com/index.php/V1/MobileCourse/Login?username=" + account + "&password=" + passWord;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                HttpURLConnection httpURLConnection = null;
-                int errorCode = -1;
-                try {
-                    MyX509TrustManager.allowAllSSL();
-                    URL url = new URL(address);
-                    httpURLConnection = (HttpURLConnection) url.openConnection();
-                    httpURLConnection.setRequestMethod("GET");
-                    httpURLConnection.setConnectTimeout(4000);
-                    InputStream inputStream = httpURLConnection.getInputStream();
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            final String address = "https://api.mysspku.com/index.php/V1/MobileCourse/Login?username=" + account + "&password=" + passWord;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    HttpURLConnection httpURLConnection = null;
+                    int errorCode = -1;
+                    try {
+                        MyX509TrustManager.allowAllSSL();
+                        URL url = new URL(address);
+                        httpURLConnection = (HttpURLConnection) url.openConnection();
+                        httpURLConnection.setRequestMethod("GET");
+                        httpURLConnection.setConnectTimeout(4000);
+                        InputStream inputStream = httpURLConnection.getInputStream();
+                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
-                    StringBuilder response = new StringBuilder();
-                    String str;
-                    while ((str = bufferedReader.readLine()) != null) {
-                        response.append(str);
+                        StringBuilder response = new StringBuilder();
+                        String str;
+                        while ((str = bufferedReader.readLine()) != null) {
+                            response.append(str);
+                        }
+
+                        String responseStr = response.toString();
+                        errorCode = getErrorCode(responseStr);
+
+                        Message message = new Message();
+                        message.what = 2;
+                        message.obj = errorCode;
+                        mHandler.sendMessage(message);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
 
-                    String responseStr = response.toString();
-                    errorCode = getErrorCode(responseStr);
-
-                    Message message = new Message();
-                    message.what = 2;
-                    message.obj = errorCode;
-                    mHandler.sendMessage(message);
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
-
-            }
-        }).start();
-
+            }).start();
+        } else {
+            Toast.makeText(MainActiity.this, "请输入完整信息", Toast.LENGTH_LONG).show();
+        }
     }
 
     protected void loginBackHint(int errorCode) {

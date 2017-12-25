@@ -3,13 +3,28 @@ package cn.edu.pku.wll.choosedormsys;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import cn.edu.pku.wll.bean.ResBeds;
 import cn.edu.pku.wll.bean.Student;
+import cn.edu.pku.wll.util.MyX509TrustManager;
 
 /**
  * Created by WLL on 2017/12/24.
@@ -22,7 +37,6 @@ public class Info extends Activity implements View.OnClickListener{
     TextView m5, m13, m14, m8, m9;
     ImageView mMapIcon, mExit;
 
-    Student student = new Student();
     private SharedPreferences sharedPreferences;
 
     @Override
@@ -31,7 +45,10 @@ public class Info extends Activity implements View.OnClickListener{
         setContentView(R.layout.info);
 
         init();
-//        setInfo(student);
+
+        Intent intent = this.getIntent();
+        getStuInfo(intent.getStringExtra("STUID"));
+
     }
 
     public void init() {
@@ -58,30 +75,14 @@ public class Info extends Activity implements View.OnClickListener{
         sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
     }
 
-    public void setInfo(Student student) {
-        mName.setText(student.getName());
-        mId.setText(student.getId());
-        mGender.setText(student.getGender());
-        mVcode.setText(student.getvCode());
-        if (student.getRoom() == null) {
-            mRoom.setText("去设置");
-            mBuilding.setText("");
-        } else {
-            mRoom.setText(student.getRoom());
-            mBuilding.setText(student.getBuilding());
-        }
-        mLocation.setText(student.getLocation());
-        mGrade.setText(student.getGrade());
-    }
-
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.room_input) {
             if (mRoom.getText().equals("去设置")) {
-                Intent intentChoose = new Intent(Info.this, Choose.class);
-                intentChoose.putExtra("STUDENTNAME", student.getName());
-                intentChoose.putExtra("STUDENTID", student.getId());
-                startActivity(intentChoose);
+//                Intent intentChoose = new Intent(Info.this, Choose.class);
+//                intentChoose.putExtra("STUDENTNAME", student.getName());
+//                intentChoose.putExtra("STUDENTID", student.getId());
+//                startActivity(intentChoose);
             }
         }
 
@@ -96,5 +97,179 @@ public class Info extends Activity implements View.OnClickListener{
             startActivity(intentLogout);
             finish();
         }
+    }
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 2:
+                    Student student2 = (Student) msg.obj;
+                    String gender = student2.getGender();
+                    Log.d("Dorm_gender", gender);
+                    if (gender.equals("男")) {
+                        getDormInfo(1);
+                        Log.d("Dorm_gender1", gender);
+                    } else if (gender.equals("女")) {
+                        getDormInfo(2);
+                        Log.d("Dorm_gender2", gender);
+                    }
+                    refreshStuInfo(student2);
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
+    private Handler mHandler1 = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 3) {
+                ResBeds resBeds = (ResBeds) msg.obj;
+                Log.d("Dorm_flag", "执行到这了");
+                refreshResBedsInfo(resBeds);
+            }
+        }
+    };
+
+    public void getStuInfo(String stuId) {
+        final String address = "https://api.mysspku.com/index.php/V1/MobileCourse/getDetail?stuid=" + stuId;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Student student1 = new Student();
+                HttpURLConnection httpURLConnection = null;
+                try {
+                    MyX509TrustManager.allowAllSSL();
+                    URL url = new URL(address);
+                    httpURLConnection = (HttpURLConnection) url.openConnection();
+                    httpURLConnection.setRequestMethod("GET");
+                    httpURLConnection.setConnectTimeout(4000);
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+                    StringBuilder response = new StringBuilder();
+                    String str;
+                    while ((str = bufferedReader.readLine()) != null) {
+                        response.append(str);
+                    }
+
+                    String responseStr = response.toString();
+                    student1 = parseStuInfo(responseStr);
+
+                    Message message = new Message();
+                    message.what = 2;
+                    message.obj = student1;
+                    mHandler.sendMessage(message);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }).start();
+    }
+
+    public Student parseStuInfo(String jsonStr) throws JSONException {
+        Student student3 = new Student();
+        JSONObject jsonObject = new JSONObject(jsonStr);
+        if (jsonObject != null) {
+            if (jsonObject.getInt("errcode") == 0) {
+                JSONObject data = jsonObject.getJSONObject("data");
+                student3.setName(data.getString("name"));
+                student3.setId(data.getString("studentid"));
+                student3.setGender(data.getString("gender"));
+                student3.setvCode(data.getString("vcode"));
+                student3.setRoom(data.getString("room"));
+                student3.setBuilding(data.getString("building"));
+                student3.setLocation(data.getString("location"));
+                student3.setGrade(data.getString("grade"));
+            }
+        } else {
+            Log.d("dorm_error", "解析个人信息错误");
+        }
+
+        return student3;
+    }
+
+    public void refreshStuInfo(Student student) {
+        mName.setText(student.getName());
+        mId.setText(student.getId());
+        mGender.setText(student.getGender());
+        mVcode.setText(student.getvCode());
+        if (student.getRoom().equals("")) {
+            mRoom.setText("去选择");
+            mBuilding.setText("");
+        } else {
+            mRoom.setTextColor(Color.BLACK);
+            mRoom.setText(student.getRoom());
+            mBuilding.setTextColor(Color.BLACK);
+            mBuilding.setText(student.getBuilding());
+        }
+        mLocation.setText(student.getLocation());
+        mGrade.setText(student.getGrade());
+    }
+
+    public void getDormInfo(int gender) {
+        final String address = "https://api.mysspku.com/index.php/V1/MobileCourse/getRoom?gender=" + gender;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ResBeds resBeds = new ResBeds();
+                HttpURLConnection httpURLConnection = null;
+                try {
+                    MyX509TrustManager.allowAllSSL();
+                    URL url = new URL(address);
+                    httpURLConnection = (HttpURLConnection) url.openConnection();
+                    httpURLConnection.setRequestMethod("GET");
+                    httpURLConnection.setConnectTimeout(4000);
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+                    StringBuilder response = new StringBuilder();
+                    String str;
+                    while ((str = bufferedReader.readLine()) != null) {
+                        response.append(str);
+                    }
+
+                    String responseStr = response.toString();
+                    Log.d("Dorm_dormStr", responseStr);
+                    resBeds = parseResBedsInfo(responseStr);
+
+                    Message message = new Message();
+                    message.what = 3;
+                    message.obj = resBeds;
+                    mHandler1.sendMessage(message);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }).start();
+    }
+
+    public ResBeds parseResBedsInfo(String jsonStr) throws JSONException {
+        ResBeds resBeds = new ResBeds();
+        JSONObject jsonObject = new JSONObject();
+        if (jsonObject.getInt("errcode") == 0) {
+            JSONObject data = jsonObject.getJSONObject("data");
+            resBeds.setFive(data.getInt("5"));
+            resBeds.setThirteen(data.getInt("13"));
+            resBeds.setFourteen(data.getInt("14"));
+            resBeds.setEight(data.getInt("8"));
+            resBeds.setNine(data.getInt("9"));
+        } else {
+            Log.d("dorm_error", "解析宿舍信息错误");
+        }
+        return resBeds;
+    }
+
+    public void refreshResBedsInfo(ResBeds resBeds) {
+        Log.d("Dorm_test", String.valueOf(resBeds.getFive()));
+        m5.setText(String.valueOf(resBeds.getFive()));
+        m13.setText(resBeds.getThirteen());
+        m14.setText(resBeds.getFourteen());
+        m8.setText(resBeds.getEight());
+        m9.setText(resBeds.getNine());
     }
 }
