@@ -6,11 +6,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -19,6 +22,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import cn.edu.pku.wll.util.MyX509TrustManager;
 
 /**
  * Created by WLL on 2017/10/27.
@@ -36,9 +51,6 @@ public class MainActiity extends Activity implements View.OnClickListener{
     private SharedPreferences sharedPreferences;
     private long[] mHints = new long[10];
 
-
-    final private int REQUEST_CODE = 1;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +58,6 @@ public class MainActiity extends Activity implements View.OnClickListener{
 
         init();
         judgeChecked();
-        intentBackHint();
     }
 
     public void init() {
@@ -151,7 +162,7 @@ public class MainActiity extends Activity implements View.OnClickListener{
             mPassword.setText(sharedPreferences.getString("PASSWORD", ""));
             if (sharedPreferences.getBoolean("AUTO_LOGIN", false)) {
                 mAutoLogin.setChecked(true);
-                jump();
+                login();
             }
         }
     }
@@ -161,7 +172,7 @@ public class MainActiity extends Activity implements View.OnClickListener{
 
         if (v.getId() == R.id.login) {
             Toast.makeText(MainActiity.this, "点击了登录", Toast.LENGTH_LONG).show();
-            jump();
+            login();
         }
 
         if (v.getId() == R.id.account_delete) {
@@ -191,7 +202,23 @@ public class MainActiity extends Activity implements View.OnClickListener{
         }
     }
 
-    public void jump() {
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 2:
+                    int errorCode = -1;
+                    errorCode = (int) msg.obj;
+
+                    loginBackHint(errorCode);
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
+    public void login() {
         account = mAccount.getText().toString();
         passWord = mPassword.getText().toString();
 
@@ -202,19 +229,50 @@ public class MainActiity extends Activity implements View.OnClickListener{
             editor.commit();
         }
 
-        //TODO：将账号密码传给跳转页面，验证工作由跳转页面处理
-        Intent intent = new Intent(MainActiity.this, Jump.class);
-        intent.putExtra("ACCOUNT", account);
-        intent.putExtra("PASSWORD", passWord);
-        startActivity(intent);
-        finish();
+        final String address = "https://api.mysspku.com/index.php/V1/MobileCourse/Login?username=" + account + "&password=" + passWord;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                HttpURLConnection httpURLConnection = null;
+                int errorCode = -1;
+                try {
+                    MyX509TrustManager.allowAllSSL();
+                    URL url = new URL(address);
+                    httpURLConnection = (HttpURLConnection) url.openConnection();
+                    httpURLConnection.setRequestMethod("GET");
+                    httpURLConnection.setConnectTimeout(4000);
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+                    StringBuilder response = new StringBuilder();
+                    String str;
+                    while ((str = bufferedReader.readLine()) != null) {
+                        response.append(str);
+                    }
+
+                    String responseStr = response.toString();
+                    errorCode = getErrorCode(responseStr);
+
+                    Message message = new Message();
+                    message.what = 2;
+                    message.obj = errorCode;
+                    mHandler.sendMessage(message);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }).start();
+
     }
 
-    protected void intentBackHint() {
-        Intent intent_back = this.getIntent();
-        int errorCode = intent_back.getIntExtra("ERRORCODE", -1);
-
-        if (errorCode == 40001) {
+    protected void loginBackHint(int errorCode) {
+        if (errorCode == 0) {
+            Intent jumpIntent = new Intent(MainActiity.this, Info.class);
+            jumpIntent.putExtra("STUID", account);
+            startActivity(jumpIntent);
+            finish();
+        } else if (errorCode == 40001) {
             mAccountError.setVisibility(View.VISIBLE);
             mAccount.setText("");
             mPassword.setText("");
@@ -226,6 +284,18 @@ public class MainActiity extends Activity implements View.OnClickListener{
             mAccount.setText("");
             mPassword.setText("");
         }
-        errorCode = -1;
+    }
+
+    public int getErrorCode(String jsonData) {
+        int errorCode = -1;
+        try {
+            JSONObject jsonObject = new JSONObject(jsonData);
+            if (jsonObject != null) {
+                errorCode = jsonObject.getInt("errcode");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return errorCode;
     }
 }
