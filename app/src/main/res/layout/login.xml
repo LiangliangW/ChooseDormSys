@@ -90,8 +90,8 @@
 
                 <CheckBox
                     android:id="@+id/check_key_visible"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_toLeftOf="@+id/key_box"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="12dip"

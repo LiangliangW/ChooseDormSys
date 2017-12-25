@@ -22,7 +22,7 @@
             android:textSize="20sp"
             android:gravity="center_vertical"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="5dp"/>
+            android:layout_marginLeft="10dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -41,7 +41,7 @@
             android:textSize="20sp"
             android:gravity="center_vertical"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="5dp"/>
+            android:layout_marginRight="10dp"/>
 
     </RelativeLayout>
 
@@ -85,6 +85,8 @@
             android:id="@+id/sep02"
             android:layout_width="match_parent"
             android:layout_height="2px"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
             android:layout_below="@+id/numchoose_text"
             android:background="#acacac"/>
 
@@ -163,13 +165,15 @@
             android:id="@+id/sep12"
             android:layout_width="match_parent"
             android:layout_height="2px"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
             android:background="#acacac"/>
 
         <RelativeLayout
             android:id="@+id/info_1_key"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/sep11"
+            android:layout_below="@+id/sep12"
             android:layout_marginTop="1dp">
 
             <TextView
@@ -246,13 +250,15 @@
             android:id="@+id/sep22"
             android:layout_width="match_parent"
             android:layout_height="2px"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
             android:background="#acacac"/>
 
         <RelativeLayout
             android:id="@+id/info_2_key"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/sep11"
+            android:layout_below="@+id/sep22"
             android:layout_marginTop="1dp">
 
             <TextView
@@ -286,12 +292,14 @@
 
     <LinearLayout
         android:id="@+id/info_3"
-        android:layout_below="@+id/info_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:orientation="vertical"
-        android:background="#ffffff">
+        android:background="#ffffff"
+        android:layout_below="@+id/info_2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <ImageView
             android:id="@+id/sep31"
@@ -329,13 +337,15 @@
             android:id="@+id/sep32"
             android:layout_width="match_parent"
             android:layout_height="2px"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
             android:background="#acacac"/>
 
         <RelativeLayout
             android:id="@+id/info_3_key"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/sep11"
+            android:layout_below="@+id/sep32"
             android:layout_marginTop="1dp">
 
             <TextView
@@ -361,6 +371,93 @@
 
         <ImageView
             android:id="@+id/sep33"
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:background="#000000"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/info_4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        android:background="#ffffff"
+        android:layout_below="@+id/info_3"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <ImageView
+            android:id="@+id/sep41"
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:background="#000000"/>
+
+        <RelativeLayout
+            android:id="@+id/info_4_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="同住人4学号"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="15dp"/>
+
+            <EditText
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
+                android:layout_alignParentRight="true"
+                android:textColor="#000000"
+                android:background="@drawable/edit_bg"/>
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/sep42"
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:background="#acacac"/>
+
+        <RelativeLayout
+            android:id="@+id/info_4_key"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sep31"
+            android:layout_marginTop="1dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="同住人4校验码"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="15dp"/>
+
+            <EditText
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
+                android:layout_alignParentRight="true"
+                android:textColor="#000000"
+                android:background="@drawable/edit_bg"/>
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/sep43"
             android:layout_width="match_parent"
             android:layout_height="2px"
             android:background="#000000"/>

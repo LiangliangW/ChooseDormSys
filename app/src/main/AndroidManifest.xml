@@ -20,6 +20,8 @@
         </activity>
 
         <activity android:name=".Jump"/>
+        <activity android:name=".Info"/>
+        <activity android:name=".Choose"/>
 
     </application>
 
