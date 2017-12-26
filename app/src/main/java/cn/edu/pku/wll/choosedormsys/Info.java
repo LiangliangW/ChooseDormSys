@@ -155,6 +155,8 @@ public class Info extends Activity implements View.OnClickListener{
                     }
 
                     String responseStr = response.toString();
+                    bufferedReader.close();
+                    inputStream.close();
                     student1 = parseStuInfo(responseStr);
 
                     Message message = new Message();
@@ -243,6 +245,8 @@ public class Info extends Activity implements View.OnClickListener{
                     }
 
                     String responseStr = response.toString();
+                    bufferedReader.close();
+                    inputStream.close();
                     Log.d("Dorm_dormStr", responseStr);
                     resBeds = parseResBedsInfo(responseStr);
                     Log.d("Dorm_parse1", "解析宿舍信息完毕");

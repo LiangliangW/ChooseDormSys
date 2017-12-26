@@ -130,7 +130,7 @@
         android:layout_below="@+id/numBuildingchoose"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:orientation="vertical"
         android:background="#ffffff">
 
@@ -477,11 +477,22 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/errorHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="学号不存在，请确认后重新填写"
+        android:textColor="#ab0815"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/info_4"
+        android:layout_marginTop="10dp"
+        android:visibility="invisible"/>
+
     <Button
         android:id="@+id/confirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/info_4"
+        android:layout_below="@id/errorHint"
         android:text="确认选择"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"

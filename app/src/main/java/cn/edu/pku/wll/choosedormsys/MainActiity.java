@@ -249,6 +249,8 @@ public class MainActiity extends Activity implements View.OnClickListener{
                         }
 
                         String responseStr = response.toString();
+                        bufferedReader.close();
+                        inputStream.close();
                         errorCode = getErrorCode(responseStr);
 
                         Message message = new Message();
