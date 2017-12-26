@@ -29,7 +29,7 @@ import cn.edu.pku.wll.util.MyX509TrustManager;
 
 /**
  * Created by WLL on 2017/12/24.
- * 圣诞快乐！
+ * 平安夜快乐！
  */
 
 public class Info extends Activity implements View.OnClickListener{

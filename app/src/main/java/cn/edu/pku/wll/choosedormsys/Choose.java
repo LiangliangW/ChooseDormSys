@@ -93,10 +93,12 @@ public class Choose extends Activity implements View.OnClickListener{
         mConfirm.setOnClickListener(this);
         mErrorHint = findViewById(R.id.errorHint);
 
+        //判断不同宿舍楼剩余床位数，若为0则不显示此可选项
         res = intent.getStringExtra("DORMRES");
         Log.d("Dorm_res", res);
         dormRes = res.split(";");
 
+        //设置人数下拉菜单
         chooseNum = new ArrayList<String>();
         chooseNum.add("单人");
         chooseNum.add("双人");
@@ -148,6 +150,7 @@ public class Choose extends Activity implements View.OnClickListener{
             }
         });
 
+        //设置楼号下拉菜单
         chooseBuilding = new ArrayList<String>();
         if (Integer.parseInt(dormRes[0]) > 0) {
             chooseBuilding.add("5号楼");
@@ -218,6 +221,7 @@ public class Choose extends Activity implements View.OnClickListener{
 
             case R.id.confirm:
                 confirmChoice(infoToJson());
+                break;
             default:
                 break;
         }

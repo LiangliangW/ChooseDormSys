@@ -12,7 +12,7 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 
 /**
- * Volley允许HTTPS
+ * Created by WLL on 2017/12/25.
  */
 public class MyX509TrustManager implements javax.net.ssl.X509TrustManager {
     private static TrustManager[] trustManagers;

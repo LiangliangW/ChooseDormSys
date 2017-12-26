@@ -6,17 +6,6 @@ package cn.edu.pku.wll.bean;
 
 public class Student {
 
-    /**
-     * studentid : 1301210899
-     * name : 暂时保密
-     * gender : 女
-     * vcode : asdf12
-     * room : 5101
-     * building : 5
-     * location : 大兴
-     * grade : 2013
-     */
-
     private String id;
     private String name;
     private String gender;

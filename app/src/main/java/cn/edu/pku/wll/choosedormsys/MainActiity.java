@@ -286,6 +286,8 @@ public class MainActiity extends Activity implements View.OnClickListener{
             mAccount.setText("");
             mPassword.setText("");
         }
+
+        mLogin.setText("登录");
     }
 
     public int getErrorCode(String jsonData) {
