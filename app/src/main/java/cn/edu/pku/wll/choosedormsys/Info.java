@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -36,6 +37,7 @@ public class Info extends Activity implements View.OnClickListener{
     TextView mName, mId, mGender, mVcode, mRoom, mBuilding, mLocation, mGrade;
     TextView m5, m13, m14, m8, m9;
     ImageView mMapIcon, mExit;
+    String id, vCode, gender, dormRes;
 
     private SharedPreferences sharedPreferences;
 
@@ -48,7 +50,6 @@ public class Info extends Activity implements View.OnClickListener{
 
         Intent intent = this.getIntent();
         getStuInfo(intent.getStringExtra("STUID"));
-
     }
 
     public void init() {
@@ -78,16 +79,19 @@ public class Info extends Activity implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.room_input) {
-            if (mRoom.getText().equals("去设置")) {
-//                Intent intentChoose = new Intent(Info.this, Choose.class);
-//                intentChoose.putExtra("STUDENTNAME", student.getName());
-//                intentChoose.putExtra("STUDENTID", student.getId());
-//                startActivity(intentChoose);
+            if (mRoom.getText().equals("去选择")) {
+                Intent intentChoose = new Intent(Info.this, Choose.class);
+                intentChoose.putExtra("STUDENTID", id);
+                intentChoose.putExtra("STUDENTVCODE", vCode);
+                intentChoose.putExtra("DORMRES", dormRes);
+
+                startActivity(intentChoose);
             }
         }
 
         if (v.getId() == R.id.mapico) {
             Intent intentMap = new Intent(Info.this, Map.class);
+            intentMap.putExtra("STUID",id);
             startActivity(intentMap);
         }
 
@@ -116,19 +120,14 @@ public class Info extends Activity implements View.OnClickListener{
                     }
                     refreshStuInfo(student2);
                     break;
+
+                case 3:
+                    ResBeds resBeds = (ResBeds) msg.obj;
+                    refreshResBedsInfo(resBeds);
+                    break;
+
                 default:
                     break;
-            }
-        }
-    };
-
-    private Handler mHandler1 = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == 3) {
-                ResBeds resBeds = (ResBeds) msg.obj;
-                Log.d("Dorm_flag", "执行到这了");
-                refreshResBedsInfo(resBeds);
             }
         }
     };
@@ -180,8 +179,16 @@ public class Info extends Activity implements View.OnClickListener{
                 student3.setId(data.getString("studentid"));
                 student3.setGender(data.getString("gender"));
                 student3.setvCode(data.getString("vcode"));
-                student3.setRoom(data.getString("room"));
-                student3.setBuilding(data.getString("building"));
+                if (data.has("room")){
+                    Log.d("Dorm_hasRoom", "true");
+                    student3.setRoom(data.getString("room"));
+                    student3.setBuilding(data.getString("building"));
+                } else {
+                    Log.d("Dorm_hasRoom", "false");
+                    student3.setRoom("去选择");
+                    student3.setBuilding("无");
+                }
+
                 student3.setLocation(data.getString("location"));
                 student3.setGrade(data.getString("grade"));
             }
@@ -193,19 +200,22 @@ public class Info extends Activity implements View.OnClickListener{
     }
 
     public void refreshStuInfo(Student student) {
+        id = student.getId();
+        vCode = student.getvCode();
+        gender = student.getGender();
+
         mName.setText(student.getName());
         mId.setText(student.getId());
         mGender.setText(student.getGender());
         mVcode.setText(student.getvCode());
-        if (student.getRoom().equals("")) {
-            mRoom.setText("去选择");
-            mBuilding.setText("");
-        } else {
+        if (!student.getRoom().equals("去选择")) {
             mRoom.setTextColor(Color.BLACK);
-            mRoom.setText(student.getRoom());
             mBuilding.setTextColor(Color.BLACK);
-            mBuilding.setText(student.getBuilding());
+        } else {
+            mRoom.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
         }
+        mRoom.setText(student.getRoom());
+        mBuilding.setText(student.getBuilding());
         mLocation.setText(student.getLocation());
         mGrade.setText(student.getGrade());
     }
@@ -235,11 +245,11 @@ public class Info extends Activity implements View.OnClickListener{
                     String responseStr = response.toString();
                     Log.d("Dorm_dormStr", responseStr);
                     resBeds = parseResBedsInfo(responseStr);
-
-                    Message message = new Message();
-                    message.what = 3;
-                    message.obj = resBeds;
-                    mHandler1.sendMessage(message);
+                    Log.d("Dorm_parse1", "解析宿舍信息完毕");
+                    Message message1 = new Message();
+                    message1.what = 3;
+                    message1.obj = resBeds;
+                    mHandler.sendMessage(message1);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -248,25 +258,38 @@ public class Info extends Activity implements View.OnClickListener{
         }).start();
     }
 
-    public ResBeds parseResBedsInfo(String jsonStr) throws JSONException {
+    public ResBeds parseResBedsInfo(String jsonStr) {
+        Log.d("Dorm_jsonStr", jsonStr);
         ResBeds resBeds = new ResBeds();
-        JSONObject jsonObject = new JSONObject();
-        if (jsonObject.getInt("errcode") == 0) {
-            JSONObject data = jsonObject.getJSONObject("data");
-            resBeds.setFive(data.getInt("5"));
-            resBeds.setThirteen(data.getInt("13"));
-            resBeds.setFourteen(data.getInt("14"));
-            resBeds.setEight(data.getInt("8"));
-            resBeds.setNine(data.getInt("9"));
-        } else {
-            Log.d("dorm_error", "解析宿舍信息错误");
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(jsonStr);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            if (jsonObject.getInt("errcode") == 0) {
+                Log.d("Dorm_parse", "解析宿舍信息");
+                JSONObject data = jsonObject.getJSONObject("data");
+                resBeds.setFive(data.getString("5"));
+                resBeds.setThirteen(data.getString("13"));
+                resBeds.setFourteen(data.getString("14"));
+                resBeds.setEight(data.getString("8"));
+                resBeds.setNine(data.getString("9"));
+                dormRes = data.getString("5") + ";" + data.getString("13") + ";"
+                        + data.getString("14") + ";" + data.getString("8") + ";" + data.getString("9");
+            } else {
+                Log.d("Dorm_error", jsonObject.getString("errcode"));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
         return resBeds;
     }
 
     public void refreshResBedsInfo(ResBeds resBeds) {
-        Log.d("Dorm_test", String.valueOf(resBeds.getFive()));
-        m5.setText(String.valueOf(resBeds.getFive()));
+        Log.d("Dorm_test", resBeds.getFive());
+        m5.setText(resBeds.getFive());
         m13.setText(resBeds.getThirteen());
         m14.setText(resBeds.getFourteen());
         m8.setText(resBeds.getEight());

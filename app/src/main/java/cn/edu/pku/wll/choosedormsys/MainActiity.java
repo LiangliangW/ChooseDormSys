@@ -170,6 +170,7 @@ public class MainActiity extends Activity implements View.OnClickListener{
     public void onClick(View v) {
 
         if (v.getId() == R.id.login) {
+            mLogin.setText("登陆中...");
             login();
         }
 

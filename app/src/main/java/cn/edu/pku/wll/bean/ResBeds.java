@@ -5,49 +5,49 @@ package cn.edu.pku.wll.bean;
  */
 
 public class ResBeds {
-    private int five;
-    private int thirteen;
-    private int fourteen;
-    private int eight;
-    private int nine;
+    private String five;
+    private String thirteen;
+    private String fourteen;
+    private String eight;
+    private String nine;
 
-    public int getFive() {
+    public String getFive() {
         return five;
     }
 
-    public void setFive(int five) {
+    public void setFive(String five) {
         this.five = five;
     }
 
-    public int getThirteen() {
+    public String getThirteen() {
         return thirteen;
     }
 
-    public void setThirteen(int thirteen) {
+    public void setThirteen(String thirteen) {
         this.thirteen = thirteen;
     }
 
-    public int getFourteen() {
+    public String getFourteen() {
         return fourteen;
     }
 
-    public void setFourteen(int fourteen) {
+    public void setFourteen(String fourteen) {
         this.fourteen = fourteen;
     }
 
-    public int getEight() {
+    public String getEight() {
         return eight;
     }
 
-    public void setEight(int eight) {
+    public void setEight(String eight) {
         this.eight = eight;
     }
 
-    public int getNine() {
+    public String getNine() {
         return nine;
     }
 
-    public void setNine(int nine) {
+    public void setNine(String nine) {
         this.nine = nine;
     }
 }

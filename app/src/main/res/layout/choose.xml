@@ -15,7 +15,7 @@
         android:layout_alignParentStart="true">
 
         <ImageView
-            android:id="@+id/back"
+            android:id="@+id/back_choose"
             android:layout_width="30dp"
             android:layout_height="match_parent"
             android:src="@drawable/back"
@@ -34,7 +34,7 @@
             android:layout_marginLeft="10dp"/>
 
         <ImageView
-            android:id="@+id/exit"
+            android:id="@+id/exit_choose"
             android:layout_width="30dp"
             android:layout_height="match_parent"
             android:src="@drawable/exit"
@@ -46,7 +46,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/numchoose"
+        android:id="@+id/numBuildingchoose"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/title"
@@ -60,21 +60,24 @@
 
 
         <RelativeLayout
-            android:id="@+id/numchoose_text"
+            android:id="@+id/numchoose"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/sep01"
             android:background="#ffffff">
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/numchoose_text"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:text="参与选宿舍人数:"
                 android:textColor="#000000"
-                android:textSize="20sp"/>
+                android:textSize="20sp"
+                android:layout_centerVertical="true"/>
 
             <Spinner
-                android:layout_width="match_parent"
+                android:id="@+id/spinner_1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="15dp">
@@ -87,7 +90,7 @@
             android:layout_height="2px"
             android:layout_marginLeft="3dp"
             android:layout_marginRight="3dp"
-            android:layout_below="@+id/numchoose_text"
+            android:layout_below="@+id/numchoose"
             android:background="#acacac"/>
 
         <RelativeLayout
@@ -97,15 +100,17 @@
             android:layout_below="@+id/sep02"
             android:background="#ffffff">
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:text="选择宿舍楼楼号:"
                 android:textColor="#000000"
-                android:textSize="20sp"/>
+                android:textSize="20sp"
+                android:layout_centerVertical="true"/>
 
             <Spinner
-                android:layout_width="match_parent"
+                android:id="@+id/spinner_2"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="15dp">
@@ -122,7 +127,7 @@
 
     <LinearLayout
         android:id="@+id/info_1"
-        android:layout_below="@+id/numchoose"
+        android:layout_below="@+id/numBuildingchoose"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
@@ -153,6 +158,7 @@
                 android:layout_alignParentStart="true" />
 
             <EditText
+                android:id="@+id/id_1"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
@@ -189,6 +195,7 @@
                 android:layout_marginStart="15dp"/>
 
             <EditText
+                android:id="@+id/vcode_1"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
@@ -238,6 +245,7 @@
                 android:layout_marginStart="15dp"/>
 
             <EditText
+                android:id="@+id/id_2"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
@@ -274,6 +282,7 @@
                 android:layout_marginStart="15dp"/>
 
             <EditText
+                android:id="@+id/vcode_2"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
@@ -325,6 +334,7 @@
                 android:layout_marginStart="15dp"/>
 
             <EditText
+                android:id="@+id/id_3"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
@@ -361,6 +371,7 @@
                 android:layout_marginStart="15dp"/>
 
             <EditText
+                android:id="@+id/vcode_3"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
@@ -412,6 +423,7 @@
                 android:layout_marginStart="15dp"/>
 
             <EditText
+                android:id="@+id/id_4"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
@@ -448,6 +460,7 @@
                 android:layout_marginStart="15dp"/>
 
             <EditText
+                android:id="@+id/vcode_4"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
@@ -464,9 +477,22 @@
 
     </LinearLayout>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="2px"
-        android:background="#000000"/>
+    <Button
+        android:id="@+id/confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/info_4"
+        android:text="确认选择"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/buttonshape" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="确认选择后无法修改，请谨慎"
+        android:textColor="#ab0815"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"/>
 </RelativeLayout>
