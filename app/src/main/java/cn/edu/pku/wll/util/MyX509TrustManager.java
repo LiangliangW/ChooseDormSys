@@ -16,8 +16,7 @@ import javax.net.ssl.TrustManager;
  */
 public class MyX509TrustManager implements javax.net.ssl.X509TrustManager {
     private static TrustManager[] trustManagers;
-    private static final X509Certificate[] _AcceptedIssuers = new
-            X509Certificate[]{};
+    private static final X509Certificate[] _AcceptedIssuers = new X509Certificate[]{};
 
     @Override
     public void checkClientTrusted(java.security.cert.X509Certificate[] x509Certificates, String s) throws java.security.cert.CertificateException {
